@@ -238,17 +238,23 @@
                         var newObj = Object.assign({}, ...mapped );
                         if (plugin != null) {
                             var object = {
-                                clientName: newObj.applyName,
-                                email: newObj.applyEmail,
-                                plugin: plugin
+                                'clientName': newObj.applyName,
+                                'email': newObj.applyEmail,
+                                'plugin': plugin
                             }
-
+							var formBody = [];
+							for (var property in object) {
+							  var encodedKey = encodeURIComponent(property);
+							  var encodedValue = encodeURIComponent(object[property]);
+							  formBody.push(encodedKey + "=" + encodedValue);
+							}
+							formBody = formBody.join("&");
+							var sourceObject = JSON.stringify(object);
                             $.ajax({
-                                url:'https://portal.yuansfer.com/api/pluginDownloadRecord/add',
+                                url:"https://portal.yuansfer.com/api/pluginDownloadRecord/add",
                                 type: "POST",
-                                contentType:"application/json; charset=utf-8",
-
-                                data: JSON.stringify(object),
+                                headers: 'Content-Type: application/x-www-form-urlencoded',
+                                data: sourceObject,
                                 success: function(data, textStatus, jqXHR) {
                                     console.log(data);
                                 },
@@ -268,9 +274,8 @@
                             },
                             success: function(data, textStatus, jqXHR) {
                                 $('.success-english').show(500);
-                                setTimeout(function() {
-                                    location.reload();
-                                }, 5000);
+                                
+
                             },
                             error: function(jqXHR, status, error) {
                                 $('.alert-danger').show(500);
@@ -296,18 +301,16 @@
                         var mapped = postData.map(item => ({ [item.name]: item.value }) );
                         var newObj = Object.assign({}, ...mapped );
                         if (plugin != null) {
-                            var object = {
+                            var sourceObject = {
                                 clientName: newObj.applyName,
                                 email: newObj.applyEmail,
                                 plugin: plugin
                             }
-
                             $.ajax({
-                                url:'https://portal.yuansfer.com/api/pluginDownloadRecord/add',
+                                url:"https://portal.yuansfer.com/api/pluginDownloadRecord/add",
                                 type: "POST",
-                                contentType:"application/json; charset=utf-8",
-
-                                data: JSON.stringify(object),
+                                headers: 'Content-Type: application/x-www-form-urlencoded',
+                                data: sourceObject,
                                 success: function(data, textStatus, jqXHR) {
                                     console.log(data);
                                 },
